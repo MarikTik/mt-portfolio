@@ -1,4 +1,4 @@
-name: Deploy to Heroku
+name: Build and Deploy to Heroku
 
 on:
   push:
@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install dependencies and build React app
+      - name: Build React App
         working-directory: client
         run: |
           npm install
@@ -30,3 +30,4 @@ jobs:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: "mt-portfolio"
           heroku_email: "mtik.philosopher@gmail.com"
+          dontuseforce: 1 
