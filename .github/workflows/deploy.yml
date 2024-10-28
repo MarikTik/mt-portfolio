@@ -27,6 +27,10 @@ jobs:
       - name: Move Build to Server
         run: mv client/build server/build
 
+      - name: Ensure Clean Git Remotes
+        run: |
+          git remote remove heroku || echo "No existing Heroku remote to remove"
+
       - name: Authenticate with Heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
