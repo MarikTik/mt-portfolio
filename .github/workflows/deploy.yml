@@ -13,6 +13,21 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' 
+
+      - name: Build React App
+        working-directory: client
+        run: |
+          npm install
+          npm run build
+      
+      - name: Move Build to Server
+        run: |
+          mv clinet/build server/build
+
       - name: Log in to Heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
