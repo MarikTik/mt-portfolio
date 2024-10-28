@@ -1,9 +1,9 @@
-name: Deploy to Heroku
+name: Build and Deploy to Heroku
 
 on:
   push:
     branches:
-      - main  # Only run when changes are pushed to the main branch
+      - main  # Trigger only on push to the main branch
 
 jobs:
   deploy:
@@ -29,7 +29,12 @@ jobs:
 
       - name: Ensure Clean Git Remotes
         run: |
-          git remote remove heroku || echo "No existing Heroku remote to remove"
+          if git remote get-url heroku; then
+            git remote remove heroku
+            echo "Removed existing Heroku remote."
+          else
+            echo "No Heroku remote to remove."
+          fi
 
       - name: Authenticate with Heroku
         env:
@@ -38,9 +43,8 @@ jobs:
           echo $HEROKU_API_KEY | heroku auth:token
           heroku git:remote -a mt-portfolio
 
-      - name: Configure Git Remote for Heroku
+      - name: Configure Git for Heroku
         run: |
-          git remote add heroku https://git.heroku.com/mt-portfolio.git
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
 
