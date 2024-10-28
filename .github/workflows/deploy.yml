@@ -25,9 +25,15 @@ jobs:
       - name: Move Build to Server
         run: mv client/build server/build
 
-      - uses: akhileshns/heroku-deploy@v3.13.15
-        with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: "mt-portfolio"
-          heroku_email: "mtik.philosopher@gmail.com"
-          dontuseforce: 1 
+      - name: Prepare Server Directory for Deployment
+        working-directory: server
+        run: |
+          git init
+          git remote add heroku https://git.heroku.com/mt-portfolio.git
+          git add .
+          git commit -m "Deploy to Heroku"
+
+      - name: Deploy to Heroku
+        working-directory: server
+        run: |
+          git push heroku main --force
